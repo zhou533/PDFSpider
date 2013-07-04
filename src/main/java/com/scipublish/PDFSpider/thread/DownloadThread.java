@@ -2,6 +2,7 @@ package com.scipublish.PDFSpider.thread;
 
 import com.scipublish.PDFSpider.model.DownloadItem;
 import com.scipublish.PDFSpider.service.HttpClientFactory;
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -51,10 +52,31 @@ public class DownloadThread implements Runnable{
             try {
                 HttpResponse httpResponse = httpClient.execute(httpGet);
                 LOGGER.info("StatusCode:" + httpResponse.getStatusLine().getStatusCode());
-                //HttpParams httpParams = httpResponse.getParams();
-                //String contentType = httpParams.getParameter("");
-                HttpEntity httpEntity = httpResponse.getEntity();
+                Header[] headers = httpResponse.getHeaders("Content-Disposition");
+                if (headers != null && headers.length > 0){
+                    //LOGGER.info("headers:" + headers.length);
+                    //LOGGER.info("Disposition:" + headers[0].getName() + " " + headers[0].getValue());
+                    //LOGGER.info("Elements:" + );
+                    //LOGGER.info("Elements:" + headers[0].getElements()[0].getName() + " " + headers[0].getElements()[0].getParameterByName("filename").getValue());
+                    for (Header header : headers){
+                        if (header.getName().equalsIgnoreCase("Content-Disposition")){
+                            if (header.getElements().length > 0 && header.getElements()[0].getName().equalsIgnoreCase("attachment")){
+                                String filename = header.getElements()[0].getParameterByName("filename").getValue();
+                                if (filename != null){
+                                    LOGGER.info("filename:" + filename);
+                                    item.setFilename(filename);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }else {
+                    String filename = item.getItemId() + ".pdf";
+                    item.setFilename(filename);
+                }
 
+
+                HttpEntity httpEntity = httpResponse.getEntity();
                 try {
                     LOGGER.info("Downloading file...");
                     InputStream inputStream = httpEntity.getContent();

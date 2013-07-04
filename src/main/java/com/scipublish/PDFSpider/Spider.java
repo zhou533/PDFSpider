@@ -4,6 +4,7 @@ import com.scipublish.PDFSpider.configuration.Configuration;
 import com.scipublish.PDFSpider.model.DownloadItem;
 import com.scipublish.PDFSpider.thread.DownloadThread;
 import com.scipublish.PDFSpider.thread.ThreadCommon;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import java.util.List;
@@ -66,7 +67,7 @@ public class Spider {
             }
 
             //
-            DownloadItem item = new DownloadItem(crawlUrl.toString());
+            DownloadItem item = new DownloadItem(crawlUrl.toString(), StringUtils.join(argList, "_"));
             try {
                 ThreadCommon.ITEM_DOWNLOAD_QUEUE.put(item);
             }catch (InterruptedException e){
