@@ -8,7 +8,9 @@ import org.apache.log4j.Logger;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,19 +22,11 @@ import java.util.List;
 public class StoreItem {
     private static final Logger LOGGER = Logger.getLogger(StoreItem.class);
 
-    private List<String> emails;
+    private Set<String> emails = new HashSet<String>();
     private String prefix;
 
-    public List<String> getEmails() {
-        return emails;
-    }
-
     public void setEmails(List<String> emails) {
-        this.emails = emails;
-    }
-
-    public String getPrefix() {
-        return prefix;
+        this.emails.addAll(emails);
     }
 
     public void setPrefix(String prefix) {
