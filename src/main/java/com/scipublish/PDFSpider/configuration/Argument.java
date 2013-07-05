@@ -1,6 +1,6 @@
 package com.scipublish.PDFSpider.configuration;
 
-import com.sun.tools.javac.util.Pair;
+import com.scipublish.PDFSpider.utils.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,7 @@ public class Argument {
     /*
 
      */
-    protected List<Pair<String, String>> args;
+    protected List<Pair> args;
 
     public Argument(String argString) throws Exception{
         this.args = parseArgString(argString);
@@ -38,8 +38,8 @@ public class Argument {
         return true;
     }
 
-    private List<Pair<String, String>> parseArgString(String arg) throws Exception{
-        List<Pair<String, String>> result = new ArrayList<Pair<String, String>>();
+    private List<Pair> parseArgString(String arg) throws Exception{
+        List<Pair> result = new ArrayList<Pair>();
         String[] args = arg.split(",");
         for (int i = 0; i < args.length; i++){
             if (!isValidArgument(args[i])){
@@ -53,7 +53,7 @@ public class Argument {
 
             String from = values[0];
             String to = (values.length == 1) ? values[0] : values[1];
-            result.add(new Pair<String, String>(from, to));
+            result.add(new Pair(from, to));
         }
         return result;
     }

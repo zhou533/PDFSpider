@@ -3,7 +3,7 @@
     <task_url>http://www.scirp.org/journal/PaperDownload.aspx?paperID=%s</task_url>
 
     <task_arg_list>
-        <task_arg type="NUMBER">31100-31129</task_arg>
+        <task_arg type="NUMBER">31129</task_arg>
     </task_arg_list>
 
     <task_interval>10</task_interval>

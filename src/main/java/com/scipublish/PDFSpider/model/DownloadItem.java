@@ -1,6 +1,5 @@
 package com.scipublish.PDFSpider.model;
 
-import com.scipublish.PDFSpider.configuration.Configuration;
 import org.apache.commons.lang3.StringUtils;
 
 /**

@@ -1,6 +1,6 @@
 package com.scipublish.PDFSpider.configuration;
 
-import com.sun.tools.javac.util.Pair;
+import com.scipublish.PDFSpider.utils.Pair;
 import org.apache.log4j.Logger;
 
 import java.util.Iterator;
@@ -23,11 +23,11 @@ public class AlphaArgument extends Argument{
     @Override
     public int count() {
         int count = 0;
-        Iterator<Pair<String, String>> iterator = args.iterator();
+        Iterator<Pair> iterator = args.iterator();
         while (iterator.hasNext()){
-            Pair<String, String> arg = iterator.next();
-            String from = arg.fst;
-            String to = arg.snd;
+            Pair arg = iterator.next();
+            String from = arg.getName();
+            String to = arg.getValue();
             count += offset(from, to);
         }
         return count;
@@ -35,11 +35,11 @@ public class AlphaArgument extends Argument{
 
     @Override
     public String argAtIndex(int index) {
-        Iterator<Pair<String, String>> iterator = args.iterator();
+        Iterator<Pair> iterator = args.iterator();
         while (iterator.hasNext()){
-            Pair<String, String> arg = iterator.next();
-            String from = arg.fst;
-            String to = arg.snd;
+            Pair arg = iterator.next();
+            String from = arg.getName();
+            String to = arg.getValue();
             int count = offset(from, to);
             if (index >= count){
                 index -= count;
