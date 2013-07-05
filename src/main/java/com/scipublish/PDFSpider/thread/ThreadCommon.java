@@ -1,6 +1,7 @@
 package com.scipublish.PDFSpider.thread;
 
 import com.scipublish.PDFSpider.model.DownloadItem;
+import com.scipublish.PDFSpider.model.StoreItem;
 
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -14,6 +15,8 @@ import java.util.concurrent.LinkedBlockingDeque;
  */
 public class ThreadCommon {
     public static final BlockingDeque<DownloadItem> ITEM_DOWNLOAD_QUEUE = new LinkedBlockingDeque<DownloadItem>(100);
+    public static final BlockingDeque<StoreItem> ITEM_STORE_QUEUE = new LinkedBlockingDeque<StoreItem>(100);
 
     public static volatile boolean ITEMS_INPUT_END = false;
+    public static volatile boolean ITEMS_DOWNLOAD_END = false;
 }

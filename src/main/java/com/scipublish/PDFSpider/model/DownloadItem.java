@@ -1,6 +1,7 @@
 package com.scipublish.PDFSpider.model;
 
 import com.scipublish.PDFSpider.configuration.Configuration;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Created with IntelliJ IDEA.
@@ -33,5 +34,22 @@ public class DownloadItem {
 
     public void setFilename(String filename) {
         this.filename = filename;
+    }
+
+    public String getPrefix(){
+        if (StringUtils.isEmpty(this.filename)){
+            return "";
+        }
+
+        if(!StringUtils.contains(this.filename, '_')){
+            return "";
+        }
+
+        String[] strs = StringUtils.split(this.filename, '_');
+        if (strs == null || strs.length == 0){
+            return "";
+        }
+
+        return strs[0];
     }
 }

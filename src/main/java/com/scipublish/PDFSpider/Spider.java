@@ -3,6 +3,7 @@ package com.scipublish.PDFSpider;
 import com.scipublish.PDFSpider.configuration.Configuration;
 import com.scipublish.PDFSpider.model.DownloadItem;
 import com.scipublish.PDFSpider.thread.DownloadThread;
+import com.scipublish.PDFSpider.thread.StoreThread;
 import com.scipublish.PDFSpider.thread.ThreadCommon;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -40,6 +41,9 @@ public class Spider {
             return;
         }
 
+        //init store thread
+        Thread saveThread = new Thread(new StoreThread());
+        saveThread.start();
         //init download threads
         for (int i = 0; i < configuration.getThreadCount(); i++){
             Thread downloadThread = new Thread(new DownloadThread());

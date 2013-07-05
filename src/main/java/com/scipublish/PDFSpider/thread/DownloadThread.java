@@ -1,7 +1,11 @@
 package com.scipublish.PDFSpider.thread;
 
+import com.scipublish.PDFSpider.configuration.Configuration;
 import com.scipublish.PDFSpider.model.DownloadItem;
+import com.scipublish.PDFSpider.model.StoreItem;
 import com.scipublish.PDFSpider.service.HttpClientFactory;
+import com.scipublish.PDFSpider.utils.PDFUtils;
+import com.scipublish.PDFSpider.utils.RegexUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -10,10 +14,8 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.log4j.Logger;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -40,6 +42,7 @@ public class DownloadThread implements Runnable{
             }
 
             if (item == null && ThreadCommon.ITEMS_INPUT_END){
+                ThreadCommon.ITEMS_DOWNLOAD_END = true;
                 LOGGER.info("download queue is empty for 10m, so exit");
                 return;
             }else if (item == null){
@@ -54,10 +57,6 @@ public class DownloadThread implements Runnable{
                 LOGGER.info("StatusCode:" + httpResponse.getStatusLine().getStatusCode());
                 Header[] headers = httpResponse.getHeaders("Content-Disposition");
                 if (headers != null && headers.length > 0){
-                    //LOGGER.info("headers:" + headers.length);
-                    //LOGGER.info("Disposition:" + headers[0].getName() + " " + headers[0].getValue());
-                    //LOGGER.info("Elements:" + );
-                    //LOGGER.info("Elements:" + headers[0].getElements()[0].getName() + " " + headers[0].getElements()[0].getParameterByName("filename").getValue());
                     for (Header header : headers){
                         if (header.getName().equalsIgnoreCase("Content-Disposition")){
                             if (header.getElements().length > 0 && header.getElements()[0].getName().equalsIgnoreCase("attachment")){
@@ -80,7 +79,14 @@ public class DownloadThread implements Runnable{
                 try {
                     LOGGER.info("Downloading file...");
                     InputStream inputStream = httpEntity.getContent();
-                    OutputStream outputStream = new FileOutputStream("/SCIPublish/PDFs/Demo.pdf");
+
+                    String path = Configuration.getInstance().getSavePath() + "PDFs/";
+                    File file = new File(path);
+                    if (!file.exists()){
+                        file.mkdirs();
+                    }
+                    String filename = path + item.getFilename();
+                    OutputStream outputStream = new FileOutputStream(filename);
                     for (int length; (length = inputStream.read(buffer)) > 0;) {
                         outputStream.write(buffer, 0, length);
                     }
@@ -99,7 +105,30 @@ public class DownloadThread implements Runnable{
                 httpGet.releaseConnection();
             }
 
+            //parse pdf
+            String allText = null;
+            String fileFullName = Configuration.getInstance().getSavePath() + "PDFs/" + item.getFilename();
+            try {
+                allText = PDFUtils.getExtractedText(fileFullName);
+            } catch (IOException e) {
+                LOGGER.error("parse " + fileFullName + " failed..", e);
+            }
 
+            if (allText != null){
+                List<String> emails = RegexUtils.getEmails(allText);
+                if (emails != null && emails.size() > 0){
+                    StoreItem storeItem = new StoreItem();
+                    storeItem.setEmails(emails);
+                    storeItem.setPrefix(item.getPrefix());
+                    try {
+                        LOGGER.info("Saving item:" + storeItem.toString());
+                        ThreadCommon.ITEM_STORE_QUEUE.put(storeItem);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                    }
+                }
+
+            }
         }
     }
 }
