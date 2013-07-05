@@ -35,7 +35,7 @@ public class Configuration {
         this.url = null;
         this.savePath = null;
         this.taskName = "Undefined";
-        this.threadCount = 1;
+        this.threadCount = 2;
         timeSymbol = "0000_00_00_00_00_00";
     }
 
@@ -157,6 +157,12 @@ public class Configuration {
             Element taskSavedDirElement = config.element("task_saved_dir");
             if (taskSavedDirElement != null){
                 savePath = taskSavedDirElement.getText();
+            }
+
+            //
+            Element taskThreadCountElement = config.element("task_thread_count");
+            if (taskThreadCountElement != null){
+                threadCount = Integer.valueOf(taskSavedDirElement.getText());
             }
 
             result = true;

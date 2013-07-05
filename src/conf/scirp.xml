@@ -6,7 +6,7 @@
         <task_arg type="NUMBER">31129</task_arg>
     </task_arg_list>
 
-    <task_interval>10</task_interval>
+    <task_thread_count>2</task_thread_count>
     <task_saved_dir>/SCIPublish/scirp/</task_saved_dir>
     <task_name>scirp</task_name>
 </config>
