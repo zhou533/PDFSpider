@@ -27,7 +27,7 @@ public class Configuration {
     private String savePath;
     private String taskName;
     private Arguments arguments = new Arguments();
-    private int threadCount;
+    private Integer threadCount;
     private String timeSymbol;
 
 
@@ -61,7 +61,7 @@ public class Configuration {
         return taskName;
     }
 
-    public int getThreadCount() {
+    public Integer getThreadCount() {
         return threadCount;
     }
 
@@ -162,7 +162,7 @@ public class Configuration {
             //
             Element taskThreadCountElement = config.element("task_thread_count");
             if (taskThreadCountElement != null){
-                threadCount = Integer.valueOf(taskSavedDirElement.getText());
+                threadCount = Integer.valueOf(taskThreadCountElement.getText());
             }
 
             result = true;
