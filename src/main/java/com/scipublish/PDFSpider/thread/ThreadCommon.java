@@ -1,5 +1,6 @@
 package com.scipublish.PDFSpider.thread;
 
+import com.scipublish.PDFSpider.model.DigItem;
 import com.scipublish.PDFSpider.model.DownloadItem;
 import com.scipublish.PDFSpider.model.StoreItem;
 
@@ -14,6 +15,9 @@ import java.util.concurrent.LinkedBlockingDeque;
  * To change this template use File | Settings | File Templates.
  */
 public class ThreadCommon {
+
+    public static final BlockingDeque<DigItem> ITEM_DIG_QUEUE = new LinkedBlockingDeque<DigItem>(100);
+
     public static final BlockingDeque<DownloadItem> ITEM_DOWNLOAD_QUEUE = new LinkedBlockingDeque<DownloadItem>(100);
     public static final BlockingDeque<StoreItem> ITEM_STORE_QUEUE = new LinkedBlockingDeque<StoreItem>(100);
 

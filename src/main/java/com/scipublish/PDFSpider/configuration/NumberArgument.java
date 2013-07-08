@@ -13,10 +13,16 @@ import java.util.Iterator;
  */
 public class NumberArgument extends Argument{
 
+    private Integer times = 1;
+
     public NumberArgument(String argString) throws Exception{
         super(argString);
     }
 
+    public NumberArgument(String argString, String times) throws Exception {
+        super(argString);
+        this.times = Integer.valueOf(times);
+    }
 
     @Override
     public int count() {
@@ -47,7 +53,7 @@ public class NumberArgument extends Argument{
                 index -= len;
                 continue;
             }
-            return String.valueOf(dest);
+            return String.valueOf(dest * this.times);
         }
         return null;
     }

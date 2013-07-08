@@ -24,7 +24,17 @@ public class RegexUtils {
         return result;
     }
 
+    private static boolean checkMatcher(String regex, String source){
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(source.toLowerCase());
+        return matcher.matches();
+    }
+
     public static List<String> getEmails(String source){
         return getMatcher("[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}", source);
+    }
+
+    public static boolean checkPDFUrl(String source){
+        return source.toLowerCase().endsWith(".pdf");
     }
 }

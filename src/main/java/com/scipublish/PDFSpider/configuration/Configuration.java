@@ -24,6 +24,7 @@ public class Configuration {
     private static Configuration instance = new Configuration();
 
     private String url;
+    private boolean dig;
     private String savePath;
     private String taskName;
     private Arguments arguments = new Arguments();
@@ -32,6 +33,7 @@ public class Configuration {
 
 
     private Configuration(){
+        this.dig = false;
         this.url = null;
         this.savePath = null;
         this.taskName = "Undefined";
@@ -71,6 +73,10 @@ public class Configuration {
 
     public String getTimeSymbol() {
         return timeSymbol;
+    }
+
+    public boolean isDig() {
+        return dig;
     }
 
     /**
@@ -114,6 +120,12 @@ public class Configuration {
             if (!this.url.matches("[a-zA-z]+://[^\\s]*")){
                 throw new Exception("an available url is necessary.");
             }
+            Attribute digAttribute = taskUrlElement.attribute("dig");
+            if (digAttribute != null && digAttribute.getValue().equalsIgnoreCase("1")){
+                this.dig = true;
+            }else{
+                this.dig = false;
+            }
 
             Element taskArgListElement = config.element("task_arg_list");
             if (taskArgListElement == null){
@@ -140,8 +152,15 @@ public class Configuration {
                     AlphaArgument alphaArgument = new AlphaArgument(taskArgElement.getText());
                     arguments.addArgument(alphaArgument);
                 }else if (type.getValue().equalsIgnoreCase("number")){
-                    NumberArgument numberArgument = new NumberArgument(taskArgElement.getText());
-                    arguments.addArgument(numberArgument);
+                    Attribute times = taskArgElement.attribute("times");
+                    if (times == null){
+                        NumberArgument numberArgument = new NumberArgument(taskArgElement.getText());
+                        arguments.addArgument(numberArgument);
+                    }else {
+                        NumberArgument numberArgument = new NumberArgument(taskArgElement.getText(), times.getValue());
+                        arguments.addArgument(numberArgument);
+                    }
+
                 }else {
                     throw new Exception("undefined argument type..");
                 }
@@ -183,6 +202,27 @@ public class Configuration {
             count++;
         }
         return count;
+    }
+
+
+    /**
+     *
+     */
+    public static String buildUrl(String originalUrl, List<String> argumentList){
+        StringBuilder crawlUrl = new StringBuilder();
+        int idx = 0, loc = 0, argIdx = 0;
+        while (idx < originalUrl.length() && (loc = originalUrl.indexOf("%s",idx)) >= 0){
+            if (loc > idx)
+                crawlUrl.append(originalUrl.substring(idx,loc));
+            crawlUrl.append(argumentList.get(argIdx));
+            argIdx++;
+            idx = loc;
+            idx += "%s".length();
+        }
+        if (idx < originalUrl.length()){
+            crawlUrl.append(originalUrl.substring(idx, originalUrl.length()));
+        }
+        return crawlUrl.toString();
     }
 
 }

@@ -1,8 +1,10 @@
 package com.scipublish.PDFSpider;
 
 import com.scipublish.PDFSpider.configuration.Configuration;
+import com.scipublish.PDFSpider.model.DigItem;
 import com.scipublish.PDFSpider.model.DownloadItem;
 import com.scipublish.PDFSpider.thread.DownloadThread;
+import com.scipublish.PDFSpider.thread.LoadThread;
 import com.scipublish.PDFSpider.thread.StoreThread;
 import com.scipublish.PDFSpider.thread.ThreadCommon;
 import org.apache.commons.lang3.StringUtils;
@@ -50,6 +52,8 @@ public class Spider {
             downloadThread.start();
         }
 
+
+        /*
         //prepare all urls which need to crawl
         int urlCount = configuration.getArguments().totalCount();
         for (int i = 0; i < urlCount; i++){
@@ -82,5 +86,27 @@ public class Spider {
 
         //
         ThreadCommon.ITEMS_INPUT_END = true;
+        */
+
+        /**
+         *
+         */
+        Thread loadThread = new Thread(new LoadThread());
+        loadThread.start();
+        int digUrlCount = configuration.getArguments().totalCount();
+        for (int i = 0; i < digUrlCount; i++){
+            List<String> argList = configuration.getArguments().argListAtIndex(i);
+            String url = configuration.getUrl();
+            String finalUrl = Configuration.buildUrl(url, argList);
+            if (finalUrl != null){
+                DigItem digItem = new DigItem(finalUrl);
+                try {
+                    ThreadCommon.ITEM_DIG_QUEUE.put(digItem);
+                }catch (InterruptedException e){
+                    e.printStackTrace();;
+                }
+            }
+            //
+        }
     }
 }
