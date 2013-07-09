@@ -1,10 +1,13 @@
 package com.scipublish.PDFSpider.service;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.conn.params.ConnRoutePNames;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 
@@ -28,7 +31,10 @@ public class HttpService {
      */
     public static byte[] get(String uri){
         LOGGER.debug("get: " + uri);
-        HttpClient httpClient = HttpClientFactory.getInstance();
+        HttpClient httpClient = new DefaultHttpClient();//HttpClientFactory.getInstance();
+        if (uri.startsWith("https")){
+            httpClient = HttpClientFactory.wrapHttpsClient(httpClient);
+        }
         HttpGet httpGet = new HttpGet(uri);
         try {
             HttpResponse httpResponse = httpClient.execute(httpGet);

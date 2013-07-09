@@ -14,13 +14,13 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created with IntelliJ IDEA.
  * User: chouchris
- * Date: 13-7-8
- * Time: AM11:55
+ * Date: 13-7-9
+ * Time: AM10:35
  * To change this template use File | Settings | File Templates.
  */
-public class LoadThread implements Runnable{
+public class DigThread implements Runnable {
 
-    private static final Logger LOGGER = Logger.getLogger(DownloadThread.class);
+    private static final Logger LOGGER = Logger.getLogger(DigThread.class);
 
     @Override
     public void run() {
@@ -30,7 +30,7 @@ public class LoadThread implements Runnable{
             try {
                 item = ThreadCommon.ITEM_DIG_QUEUE.poll(10, TimeUnit.MINUTES);
             } catch (InterruptedException e) {
-               LOGGER.error(e);
+                LOGGER.error(e);
             }
 
             if (item == null){

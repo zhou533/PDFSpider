@@ -2,12 +2,10 @@ package com.scipublish.PDFSpider;
 
 import com.scipublish.PDFSpider.configuration.Configuration;
 import com.scipublish.PDFSpider.model.DigItem;
-import com.scipublish.PDFSpider.model.DownloadItem;
+import com.scipublish.PDFSpider.thread.DigThread;
 import com.scipublish.PDFSpider.thread.DownloadThread;
-import com.scipublish.PDFSpider.thread.LoadThread;
 import com.scipublish.PDFSpider.thread.StoreThread;
 import com.scipublish.PDFSpider.thread.ThreadCommon;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import java.util.List;
@@ -91,7 +89,7 @@ public class Spider {
         /**
          *
          */
-        Thread loadThread = new Thread(new LoadThread());
+        Thread loadThread = new Thread(new DigThread());
         loadThread.start();
         int digUrlCount = configuration.getArguments().totalCount();
         for (int i = 0; i < digUrlCount; i++){
