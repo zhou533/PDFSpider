@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
-    <task_url dig="1">http://www.google.com/search?q=inurl:http://downloads.hindawi.com/+filetype:pdf&amp;num=10&amp;start=%s&amp;filter=0&amp;ncr=1</task_url>
+    <task_url dig="1">https://www.google.com/search?q=inurl:http://downloads.hindawi.com/+filetype:pdf&amp;num=10&amp;start=%s&amp;filter=0&amp;hl=en</task_url>
 
     <task_arg_list>
         <task_arg type="NUMBER" times="10">0-1</task_arg>

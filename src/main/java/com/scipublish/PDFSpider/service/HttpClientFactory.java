@@ -32,7 +32,6 @@ import java.util.Random;
  */
 public class HttpClientFactory {
 
-    private static final String USERAGENT = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:23.0) Gecko/20130406 Firefox/23.0";
     private static final String CHARSET = "UTF-8";
     private static DefaultHttpClient httpClient;
     private static final String[] USERAGENTS = {
@@ -51,7 +50,7 @@ public class HttpClientFactory {
         HttpProtocolParamBean paramBean = new HttpProtocolParamBean(params);
         paramBean.setVersion(HttpVersion.HTTP_1_1);
         paramBean.setContentCharset(CHARSET);
-        paramBean.setUserAgent(USERAGENT);
+        paramBean.setUserAgent(HttpClientFactory.randomUserAgent());
         paramBean.setUseExpectContinue(true);
         params.setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 300000);
         params.setParameter(CoreConnectionPNames.SO_TIMEOUT, 300000);
@@ -65,14 +64,15 @@ public class HttpClientFactory {
         httpClient = new DefaultHttpClient(cm, params);
     }
 
+    static {
+
+    }
+
     public static HttpClient getInstance(){
         return httpClient;
     }
 
-    public HttpClientFactory() {
-    }
-
-    public static HttpClient wrapHttpsClient(HttpClient base) {
+    public static HttpClient getHttpsClient(){
         try {
             HttpParams params = new BasicHttpParams();
             HttpProtocolParamBean paramBean = new HttpProtocolParamBean(params);
@@ -83,8 +83,8 @@ public class HttpClientFactory {
             params.setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 300000);
             params.setParameter(CoreConnectionPNames.SO_TIMEOUT, 300000);
 
-            HttpHost proxy = new HttpHost("127.0.0.1", 8087);
-            params.setParameter(ConnRoutePNames.DEFAULT_PROXY,proxy);
+            //HttpHost proxy = new HttpHost("127.0.0.1", 8087);
+            //params.setParameter(ConnRoutePNames.DEFAULT_PROXY,proxy);
 
             SSLContext ctx = SSLContext.getInstance("TLS");
             X509TrustManager tm = new X509TrustManager() {
@@ -107,8 +107,7 @@ public class HttpClientFactory {
         }
     }
 
-    public static HttpClient wrapHttpClient(){
-        return wrapHttpsClient(httpClient);
+    public HttpClientFactory() {
     }
 
     private static String randomUserAgent(){

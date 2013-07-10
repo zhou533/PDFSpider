@@ -31,9 +31,11 @@ public class HttpService {
      */
     public static byte[] get(String uri){
         LOGGER.debug("get: " + uri);
-        HttpClient httpClient = new DefaultHttpClient();//HttpClientFactory.getInstance();
+        HttpClient httpClient;
         if (uri.startsWith("https")){
-            httpClient = HttpClientFactory.wrapHttpsClient(httpClient);
+            httpClient = HttpClientFactory.getHttpsClient();
+        }else {
+            httpClient = HttpClientFactory.getInstance();
         }
         HttpGet httpGet = new HttpGet(uri);
         try {

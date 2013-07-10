@@ -3,12 +3,16 @@ package com.scipublish.PDFSpider.thread;
 import com.scipublish.PDFSpider.model.DigItem;
 import com.scipublish.PDFSpider.service.HttpService;
 import com.scipublish.PDFSpider.utils.RegexUtils;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.nio.charset.Charset;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -45,9 +49,20 @@ public class DigThread implements Runnable {
             Document document = Jsoup.parse(new String(bytes));
             Elements elements = document.select("a");
             for (Element element : elements){
-                String url = element.attr("abs:href");
+                String url = element.attr("href");
+
                 if (RegexUtils.checkPDFUrl(url)){
                     LOGGER.info("link:" + url);
+                }else {
+                    List<NameValuePair> params = URLEncodedUtils.parse(url, Charset.forName("UTF-8"));
+                    if (params != null && params.size() > 0){
+                        for (NameValuePair pair : params){
+                            String value = pair.getValue();
+                            if (value != null && RegexUtils.checkPDFUrl(value)){
+                                LOGGER.info("link:" + value);
+                            }
+                        }
+                    }
                 }
             }
         }
