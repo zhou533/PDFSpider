@@ -45,10 +45,10 @@ public class Spider {
         Thread saveThread = new Thread(new StoreThread());
         saveThread.start();
         //init download threads
-        for (int i = 0; i < configuration.getThreadCount(); i++){
+        /*for (int i = 0; i < configuration.getThreadCount(); i++){
             Thread downloadThread = new Thread(new DownloadThread());
             downloadThread.start();
-        }
+        }*/
 
 
         /*
@@ -106,5 +106,6 @@ public class Spider {
             }
             //
         }
+        ThreadCommon.ITEMS_INPUT_END = true;
     }
 }

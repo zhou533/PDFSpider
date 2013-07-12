@@ -44,7 +44,11 @@ public class DigThread implements Runnable {
                 LOGGER.error(e);
             }
 
-            if (item == null){
+            if (item == null && ThreadCommon.ITEMS_INPUT_END){
+                ThreadCommon.ITEMS_DOWNLOAD_END = true;
+                LOGGER.info("download queue is empty for 10m, so exit");
+                return;
+            }else if (item == null){
                 continue;
             }
 

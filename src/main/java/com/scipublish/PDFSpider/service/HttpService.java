@@ -44,9 +44,9 @@ public class HttpService {
             byte[] bytes = EntityUtils.toByteArray(httpEntity);
             return bytes;
         }catch (ClientProtocolException e){
-            LOGGER.error("get " + uri + " error", e);
+            LOGGER.info("HttpService get " + uri + " error", e);
         }catch (IOException e){
-            LOGGER.error("get " + uri + " error", e);
+            LOGGER.info("HttpService get " + uri + " error", e);
         }finally {
             httpGet.releaseConnection();
         }
