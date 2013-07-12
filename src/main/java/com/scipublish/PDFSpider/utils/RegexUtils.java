@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
  */
 public class RegexUtils {
 
-    private static List<String> getMatcher(String regex, String source){
+    public static List<String> getMatcher(String regex, String source){
         List<String> result = new ArrayList<String>();
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(source.toLowerCase());

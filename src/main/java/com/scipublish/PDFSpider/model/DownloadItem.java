@@ -1,5 +1,7 @@
 package com.scipublish.PDFSpider.model;
 
+import com.scipublish.PDFSpider.journal.JournalParser;
+import com.scipublish.PDFSpider.journal.JournalParserFactory;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -13,6 +15,7 @@ public class DownloadItem {
     private String url;
     private String filename;
     private String itemId;
+    private String detail;
 
     public DownloadItem(String url, String itemId) {
         this.url = url;
@@ -35,20 +38,12 @@ public class DownloadItem {
         this.filename = filename;
     }
 
+    public void setDetail(String detail) {
+        this.detail = detail;
+    }
+
     public String getPrefix(){
-        if (StringUtils.isEmpty(this.filename)){
-            return "";
-        }
-
-        if(!StringUtils.contains(this.filename, '_')){
-            return "";
-        }
-
-        String[] strs = StringUtils.split(this.filename, '_');
-        if (strs == null || strs.length == 0){
-            return "";
-        }
-
-        return strs[0];
+        JournalParser parser = JournalParserFactory.getParser(this.url);
+        return parser.parse(this.url, this.filename);
     }
 }
