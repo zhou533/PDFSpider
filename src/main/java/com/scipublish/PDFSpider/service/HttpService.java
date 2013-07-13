@@ -30,7 +30,7 @@ public class HttpService {
 
      */
     public static byte[] get(String uri){
-        LOGGER.debug("get: " + uri);
+        LOGGER.info("get: " + uri);
         HttpClient httpClient;
         if (uri.startsWith("https")){
             httpClient = HttpClientFactory.getHttpsClient();
